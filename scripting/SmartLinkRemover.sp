@@ -189,6 +189,8 @@ public StringMap clearStringMap(StringMap stringMap) {
 }
 
 public bool inWhitelist(int client, char[] url) {
+	strToLower(url);
+	
 	if (simpleWhitelist == null) {
 		LogError("Something went wrong with the whitelist StringMap!");
 	}
