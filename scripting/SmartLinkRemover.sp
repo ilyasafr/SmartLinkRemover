@@ -5,7 +5,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.6.2"
+#define PLUGIN_VERSION "1.7.0"
 
 Regex urlPattern;
 RegexError regexError;
@@ -17,7 +17,7 @@ ConVar cKeepHalf;
 
 public Plugin myinfo = {
 	name = "Smart Link Remover", 
-	author = "Totenfluch, Mitch, Agent Wesker", 
+	author = "Totenfluch, Mitch, Agent Wesker, B3none", 
 	description = "Removes all Links from Player Names", 
 	version = PLUGIN_VERSION, 
 	url = "https://github.com/Totenfluch/SmartLinkRemover"
@@ -175,7 +175,10 @@ public void loadWhitelist() {
 }
 
 public SMCResult whitelistKeyValue(SMCParser smc, const char[] key, const char[] value, bool key_quotes, bool value_quotes) {
-	simpleWhitelist.SetValue(key, ReadFlagString(value));
+	char lcKey[256];
+	Format(lcKey, sizeof(lcKey), "%s", key);
+	strToLower(lcKey);
+	simpleWhitelist.SetValue(lcKey, ReadFlagString(value));
 }
 
 public StringMap clearStringMap(StringMap stringMap) {
@@ -186,6 +189,8 @@ public StringMap clearStringMap(StringMap stringMap) {
 }
 
 public bool inWhitelist(int client, char[] url) {
+	strToLower(url);
+	
 	if (simpleWhitelist == null) {
 		LogError("Something went wrong with the whitelist StringMap!");
 	}
@@ -197,4 +202,11 @@ public bool inWhitelist(int client, char[] url) {
 	}
 	
 	return false; //No matches in the whitelist.
+}
+
+public void strToLower(char[] str)
+{
+	for (int i = 0; i <= strlen(str); i++) {
+		str[i] = CharToLower(str[i]);
+	}
 }
